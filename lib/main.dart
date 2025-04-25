@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const MyHomePage(title: 'Timezone detector example'),
     );
   }
 }
@@ -33,15 +33,21 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   String timezone = 'Unknown timezone.';
 
+  @override
+  void initState() {
+    super.initState();
+
+    listenTimezoneChanges();
+  }
+
   void listenTimezoneChanges() {
     const eventChannel = EventChannel('timeHandlerEvent');
     eventChannel.receiveBroadcastStream().listen((event) {
-      print('Timezone changed: $event');
       setState(() {
         timezone = event.toString();
       });
     }, onError: (error) {
-      print('Error: $error');
+      debugPrint('Error: $error');
     });
   }
 
@@ -56,21 +62,10 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text(
-              'My battery level app',
-            ),
-            ElevatedButton(
-              onPressed: () {
-                listenTimezoneChanges();
-              },
-              child: const Text('Get Battery Level'),
-            ),
-            SizedBox(
-              height: 30,
-            ),
             Text(
-              'MyTimezone $timezone',
+              'MyTimezone: \n $timezone',
               style: Theme.of(context).textTheme.headlineMedium,
+              textAlign: TextAlign.center,
             ),
           ],
         ),
