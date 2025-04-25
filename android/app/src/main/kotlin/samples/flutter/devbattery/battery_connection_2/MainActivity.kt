@@ -35,7 +35,8 @@ class MainActivity: FlutterActivity() {
             val intentFilter = IntentFilter(Intent.ACTION_TIMEZONE_CHANGED)
             receiver = object : BroadcastReceiver() {
                 override fun onReceive(context: Context, intent: Intent) {
-                    eventSink?.success("Timezone changed")
+                    val timezone = TimeZone.getDefault().id
+                    eventSink?.success(timezone)
                 }
             }
             context.registerReceiver(receiver, intentFilter)
